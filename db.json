@@ -1,0 +1,39 @@
+{
+  "posts": [
+    {
+      "name": "Maria",
+      "age": 30,
+      "id": "737d"
+    },
+    {
+      "name": "Paulo",
+      "age": 30,
+      "id": "8ab1"
+    },
+    {
+      "id": "b741",
+      "name": "Pedro Lucas",
+      "age": "13"
+    },
+    {
+      "id": "4b27",
+      "name": "Pedro Lucas",
+      "age": "13"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "text": "a comment about post 1",
+      "postId": "1"
+    },
+    {
+      "id": "2",
+      "text": "another comment about post 1",
+      "postId": "1"
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
