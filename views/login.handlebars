@@ -1,0 +1,19 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4" style="width: 20rem;">
+    <div class="text-center mb-4">
+      <i class="fas fa-sign-in-alt fa-3x"></i>
+      <h3 class="mt-2">Login</h3>
+    </div>
+    <form action="/login" method="POST">
+      <div class="mb-3">
+        <label for="username" class="form-label"><i class="fas fa-user"></i> Usuário</label>
+        <input type="text" class="form-control" name="username" id="username" placeholder="Digite seu usuário">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label"><i class="fas fa-lock"></i> Senha</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Digite sua senha">
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Entrar</button>
+    </form>
+  </div>
+</div>

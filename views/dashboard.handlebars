@@ -1,0 +1,52 @@
+<div class="container mt-5">
+  <div class="newUser">
+    <a href="/users/add">Novo Usuário</a><br>
+    <a href="/logout">Logout</a>
+  </div>
+  <h1 class="mb-4">Dashboard</h1>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+      </tr>
+    </thead>
+    <tbody id="userTable">
+      <!-- Dados serão inseridos aqui -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // Função para buscar dados da API
+  async function fetchData() {
+    try {
+      const response = await fetch('http://localhost:3000/posts/');
+      const data = await response.json();
+      renderTable(data);
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error);
+    }
+  }
+
+  // Função para renderizar os dados na tabela
+  function renderTable(data) {
+    const tableBody = document.getElementById('userTable');
+    tableBody.innerHTML = '';
+
+    data.forEach(user => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+              <td>${user.id}</td>
+              <td>${user.name}</td>
+              <td>${user.age}</td>
+            `;
+      tableBody.appendChild(row);
+    });
+  }
+
+  // Chama a função para buscar e renderizar os dados ao carregar a página
+  fetchData();
+</script>

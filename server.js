@@ -3,13 +3,13 @@ const app = express()
 const port = 3001
 const path = require('path')
 const session = require('express-session');
-const { engine } = require('express-handlebars');
+const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser');
 
 
 
 //anexa a pasta templates
-const basePath = path.join(__dirname, 'templates')
+// const basePath = path.join(__dirname, 'templates')
 
 //parser para leitura do body
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,24 +24,25 @@ app.use(session({
 }));
 
 // Configurando o Handlebars como motor de visualização
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
+
+app.engine('handlebars', exphbs.engine())
+app.set('view engine', 'handlebars')
 
 
 app.get('/dashboard', checkAuth, (req, res) => {
-  res.sendFile(`${basePath}/dashboard.html`)
+  res.render(`dashboard`)
 })
 
 
 app.get('/users/add', checkAuth, (req, res) => {
-  res.sendFile(`${basePath}/userform.html`)
+  res.render(`userform`)
 })
 
 app.post('/users/save', checkAuth, (req, res) => {
   const name = req.body.name
   const age = req.body.age
   adicionarUsuario(name, age);
-  res.sendFile(`${basePath}/dashboard.html`)
+  res.render(`dashboard`)
 })
 
 async function adicionarUsuario(name, age) {
@@ -97,9 +98,9 @@ app.post('/login', (req, res) => {
     req.session.isLoggedIn = true;
     req.session.username = username;
 
-    res.sendFile(`${basePath}/dashboard.html`)
+    res.render(`dashboard`)
   } else {
-    res.sendFile(`${basePath}/login.html`)
+    res.render(`login`)
   }
 
 
@@ -109,7 +110,7 @@ function checkAuth(req, res, next) {
   if (req.session.username) {
     next();
   } else {
-    res.sendFile(`${basePath}/login.html`)
+    res.render(`login`)
   }
 }
 
@@ -121,17 +122,22 @@ app.get('/logout', (req, res) => {
       console.log(err);
     } else {
       console.log('Session destroyed');
-      res.sendFile(`${basePath}/login.html`)
+      res.render(`login`)
     }
   });
 });
 
 
 
+
+
 app.get('/', (req, res) => {
   const sessionData = req.session;
-  res.sendFile(`${basePath}/login.html`)
+  res.render(`login`)
 })
+
+
+
 
 
 
