@@ -1,41 +1,5 @@
 {
-  "posts": [
-    {
-      "name": "Maria",
-      "age": 30,
-      "id": "737d"
-    },
-    {
-      "name": "Paulo",
-      "age": 30,
-      "id": "8ab1"
-    },
-    {
-      "id": "b741",
-      "name": "Pedro Lucas",
-      "age": "13"
-    },
-    {
-      "id": "4b27",
-      "name": "Pedro Lucas",
-      "age": "13"
-    },
-    {
-      "id": "62f8",
-      "name": "Roberto",
-      "age": "33"
-    },
-    {
-      "id": "c382",
-      "name": "FERNANDO",
-      "age": "25"
-    },
-    {
-      "id": "ccd4",
-      "name": "MARLON",
-      "age": "23"
-    }
-  ],
+  "posts": [],
   "comments": [
     {
       "id": "1",

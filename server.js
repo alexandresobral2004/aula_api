@@ -30,6 +30,7 @@ app.set('view engine', 'handlebars')
 
 
 app.get('/dashboard', checkAuth, (req, res) => {
+
   res.render(`dashboard`)
 })
 
@@ -38,11 +39,12 @@ app.get('/users/add', checkAuth, (req, res) => {
   res.render(`userform`)
 })
 
-app.post('/users/save', checkAuth, (req, res) => {
+app.post('/users/save', async (req, res) => {
   const name = req.body.name
   const age = req.body.age
-  adicionarUsuario(name, age);
-  res.render(`dashboard`)
+  const data = await adicionarUsuario(name, age);
+  const users = await getData();
+  res.render('dashboard', { users: users, isAuthenticated: true });
 })
 
 async function adicionarUsuario(name, age) {
@@ -69,38 +71,47 @@ async function adicionarUsuario(name, age) {
   }
 }
 
-async function deletarUsuario(id) {
-  const url = `http://localhost:3000/posts/${id}`; // Inclui o ID do usuário na URL
+app.post('/users/delete', async (req, res) => {
+  const id = req.body.id;
+  const result = await deleteData(id);
+  const users = await getData(); // Aguarde o resultado da função getData()
+  res.render('dashboard', { users: users, isAuthenticated: true }); // Renderize o dashboard com os dados
 
+})
+
+
+async function getData() {
   try {
-    const response = await fetch(url, {
-      method: 'DELETE', // Define o método HTTP como DELETE
-      headers: {
-        'Content-Type': 'application/json' // Define o tipo de conteúdo como JSON
-      }
-    });
+    const response = await fetch('http://localhost:3000/posts/');
+    const data = response.json();
+    return data
 
-    if (response.ok) {
-      console.log('Usuário deletado com sucesso'); // Exibe uma mensagem de sucesso no console
-    } else {
-      console.error('Erro ao deletar usuário:', response.statusText); // Exibe uma mensagem de erro no console
-    }
   } catch (error) {
-    console.error('Erro na requisição:', error); // Exibe uma mensagem de erro no console em caso de exceção
+    console.error('Erro ao buscar dados:', error);
   }
 }
 
-app.post('/login', (req, res) => {
+
+
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log(username, password);
+  let result = 0;
   // Authenticate user
   if (username === 'admin' && password === 'admin') {
     req.session.isLoggedIn = true;
     req.session.username = username;
 
-    res.render(`dashboard`)
+    try {
+      const users = await getData(); // Aguarde o resultado da função getData()
+      console.log(users);
+      res.render('dashboard', { users: users, isAuthenticated: true }); // Renderize o dashboard com os dados
+    } catch (error) {
+      console.error('Erro ao renderizar o dashboard:', error);
+      res.status(500).send('Erro ao carregar o dashboard');
+    }
+
   } else {
-    res.render(`login`)
+    res.redirect('/login')
   }
 
 
@@ -128,7 +139,29 @@ app.get('/logout', (req, res) => {
 });
 
 
+app.get('/login', (req, res) => {
+  res.render(`login`)
+})
 
+
+async function deleteData(id) {
+  try {
+    const response = await fetch(`http://localhost:3000/posts/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ao remover o dado');
+    }
+
+    const result = await response.json();
+    console.log(`Dado com id ${id} removido com sucesso:`, result);
+    return result;
+  } catch (error) {
+    console.error('Erro ao remover dado:', error);
+    return null; // Retorne null ou outro valor padrão em caso de erro
+  }
+}
 
 
 app.get('/', (req, res) => {
